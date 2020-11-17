@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+rm -rf /var/spool/cron/crontabs
+mkdir -m 0644 -p /var/spool/cron/crontabs
+
+find /etc/cron.d -mindepth 1 -maxdepth 1 -exec cp -f '{}' /var/spool/cron/crontabs \;
+
+chmod -R 0644 /var/spool/cron/crontabs
+
+exec crond -c /var/spool/cron/crontabs -b -L /var/log/cron/cron.log "$@"
